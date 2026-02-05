@@ -1,183 +1,293 @@
-body{
-  margin:0;
-  /*overflow-y : scroll;*/
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-.nav_item {
-  list-style-type: none;
-  display: inline-block;
+body {
+  font-family: Arial, sans-serif;
 }
 
-.search_container {
+.main_container {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #1a1a1a;
+  color: white;
+}
+
+.nav_left a,
+.nav_left a + a,
+.nav_right a,
+.nav_right button {
+  margin-right: 15px;
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
   align-items: center;
 }
 
-.main_container{
-  border: black solid 1px;
+.nav_center {
   display: flex;
   justify-content: center;
-  align-items: center;
+  flex: 1;
+  gap: 5px;
 }
 
-
-.search_button {
-  border-radius: 0 20px 20px 0;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-
-.search_bar{
+.search_bar {
+  padding: 6px 10px;
   border-radius: 20px 0 0 20px;
   border: 1px solid grey;
-  padding:11px;
-  vertical-align: middle;
-  width: 450px;
-  background-color: #1a1a1a;
+  flex: 1; /* flexible width */
+  min-width: 150px;
+  max-width: 300px;
 }
 
-.search_bar:focus{
-  outline: none;
-  border: 1px solid blue;
+.search_button {
+  padding: 6px 12px;
+  border-radius: 0 20px 20px 0;
+  border: none;
+  background-color: royalblue;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-.user_container{
-  display: inline-block;
+.search_button:hover {
+  background-color: #0056d2;
+}
+
+.nav_right button {
+  margin-left: 10px;
+  padding: 6px 12px;
+  border-radius: 5px;
+  background-color: royalblue;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.nav_right button:hover {
+  background-color: #0056d2;
 }
 
 .dropdown {
-  position: relative;
+  float: left;
+  overflow: hidden;
 }
 
-/* Style the dropdown button */
+
 .dropbtn {
-  background-color: #4CAF50;
-  color: white;
-  padding: 16px;
   font-size: 16px;
   border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
   cursor: pointer;
-  border-radius: 50%;
 }
 
-/* Dropdown content */
+
+.navbar a:hover, .dropdown:hover .dropbtn {
+  background-color: red;
+}
+
+
 .dropdown-content {
   display: none;
   position: absolute;
   background-color: #f9f9f9;
-  min-width: 200px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  min-width: 160px;
+  box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+  z-index: 1;
 }
 
-/* Links inside dropdown content */
-.dropdown-content a {
+
+.dropdown-content button {
+  width: 100%;
+  border: none;
+  background: none;
   color: black;
   padding: 12px 16px;
-  text-decoration: none;
-  display: block;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
 }
 
-/* Change color of dropdown links on hover */
-.dropdown-content a:hover {
-  background-color: #f1f1f1
+
+.dropdown-content button:hover {
+  background-color: #ddd;
 }
 
-/* Show the dropdown content on hover */
+/* Show dropdown on hover */
 .dropdown:hover .dropdown-content {
   display: block;
 }
 
-/* Change background color of dropdown button on hover */
-.dropdown:hover .dropbtn {
-  background-color: #3e8e41;
+.auth_flex {
+  display: flex;
+  height: 95vh;
+  width: 100vw;
 }
 
 
-
+.auth_Container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #fdf5e2;
+  border-right: 2px solid grey;
+  padding: 20px;
+}
 
 
 .auth_Form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 15px;
+  width: 100%;
+  max-width: 400px;
 }
 
-.auth_Container h1{
-  font-size: 50px;
+
+.auth_Container h1 {
+  font-size: 48px;
+  color: black;
+  margin-bottom: 30px;
+  text-align: center;
+}
+.auth_Container h3{
+  color:red;
+}
+
+.auth_Form label {
+  display: block;
+  font-size: 18px;
+  margin-bottom: 5px;
   color: black;
 }
+.auth_Form a{
+  text-decoration: none;
+  color: grey;
 
-.auth_Form label{
-  font-size: 20px;
-  color: black;
 }
 
-.auth_Form input{
-  width: 250px;
-  padding: 8px;
-  background-color: white;
-  color:black;
-}
+
 .auth_Form h4{
   color:grey;
 }
-.auth_Form button{
-  padding: 10px 113px;
-  background-color: royalblue;
+
+
+.auth_Form input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #fdf5e2;
+  color: black;
 }
 
 
-.auth_Form label > input{
-  margin-top: 5px;
+.auth_Form input:focus {
+  outline: none;
+  border: 2px solid royalblue;
+}
+
+.auth_Form input.error:focus {
+  border: 2px solid red;
+}
+
+.auth_Form input.error{
+  border: 2px solid red;
+}
+
+
+.auth_Form input:-webkit-autofill,
+.auth_Form input:-webkit-autofill:hover,
+.auth_Form input:-webkit-autofill:focus,
+.auth_Form input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px #fdf5e2 inset;
+  -webkit-text-fill-color: black;
+}
+
+
+
+.auth_Form .confirmation_errors {
+  color: red;
+  font-size: 18px;
+  margin-top: -5px;
   margin-bottom: 5px;
+}
 
-}
-.auth_Form label .error{
-  border: 3px solid red;
-}
-.auth_Form .confirmation_errors{
+.auth_Form .user_error {
   color: red;
 }
 
 
-.auth_Form label * {
-  display: block;
+.auth_Form button {
+  padding: 12px;
+  background-color: royalblue;
+  color: white;
+  font-size: 16px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.auth_flex{
-  display: flex;
-
+.auth_Form button:disabled {
+  background-color: lightgray;
+  cursor: not-allowed;
 }
 
-.auth_Container{
-  flex: 1;
-
+.auth_Form button:not(:disabled):hover {
   background-color: white;
-  border-right: 2px solid grey;
-  justify-items: center;
-  align-content: center;
-
+  color: royalblue;
+  border: 2px solid royalblue;
 }
 
-.auth__background{
+.auth__background {
   flex: 1;
-  background-color: pink;
-
+  position: relative;
 }
 
-.auth__background img{
+.auth__background img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-.auth_Container h3{
-  color: red;
+
+.container_videos{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.container_videos li {
+  list-style: none;
+  width: 470px;
+}
+
+.video-wrapper {
+  width: 470px;
+  height: 255px;
+  background: black;
+  overflow: hidden;
+}
+
+.video-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 

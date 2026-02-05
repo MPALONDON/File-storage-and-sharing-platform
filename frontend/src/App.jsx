@@ -1,15 +1,16 @@
 import { useState } from 'react'
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {BrowserRouter, Routes, Route, useParams} from "react-router-dom";
 
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import Home from "./home/Home.jsx";
 import SignIn from "./signin/SignIn.jsx";
 import Register from "./register/Register.jsx";
+import MyAccount from "./account/myAccount.jsx";
+import Video from "./home/Video.jsx";
 
 import './App.css'
 
 function App() {
+
 
   return (
       <BrowserRouter>
@@ -17,6 +18,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/sign-in" element={<SignIn />} />
+          <Route path="/:username" element={<MyAccount />} />
+          <Route path="/watch" element={<Video />} />
 
         {/*<Route path="*" element={<NotFound />} />*/}
       </Routes>

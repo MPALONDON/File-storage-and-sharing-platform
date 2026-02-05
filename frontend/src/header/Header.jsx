@@ -1,42 +1,69 @@
-import { Link } from "react-router-dom";
+import { Link ,useNavigate} from "react-router-dom";
+import { useState } from "react";
 
+export default function Header({ sidebar, homepage, signin, signout, userAccount }) {
+  const [token, setToken] = useState(() => localStorage.getItem("token"));
 
-export default function Header(){
-    return(
-       <nav className="main_container">
-          <ul className="nav_list">
-            <li className="nav_item">
-              <a href="http://">icon1</a>
-            </li>
+  const navigate = useNavigate();
 
-            <li className="nav_item">
-              <Link to="/">YouTube</Link>
+  async function find_user(){
+      console.log(token)
 
-            </li>
+      const response = await fetch("http://127.0.0.1:8000/username", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      }}
 
-            <li className="nav_item nav_item--search">
-              <div className="search_container">
-                <input className="search_bar" name="SearchBar" placeholder="Search" />
-                <button className="search_button" name="SearchButton">
-                  Search
-                </button>
-              </div>
-            </li>
-
-              <li className="nav_item nav_item--signin">
-                  {/*<div className="dropdown">*/}
-                  {/*    <button className="dropbtn"></button>*/}
-                  {/*    <div className="dropdown-content">*/}
-                  {/*        <a href="#">View your channel</a>*/}
-                  {/*        <a href="#">Link 2</a>*/}
-                  {/*        <a href="#">Link 3</a>*/}
-                  {/*    </div>*/}
-                  {/*</div>*/}
-                  <button>
-                  <Link to="/sign-in">Sign-In</Link>
-                      </button>
-              </li>
-          </ul>
-       </nav>
     )
+      const data = await response.json()
+
+      navigate(`/${data.username}`)
+
+  }
+
+  return (
+    <nav className="main_container">
+      <div className="nav_left">
+        <a href="#">{sidebar}</a>
+        <Link to="/">{homepage}</Link>
+      </div>
+
+      <div className="nav_center">
+        <input className="search_bar" placeholder="Search" />
+        <button className="search_button">Search</button>
+      </div>
+
+      <div className="nav_right">
+        {token ? (
+            <>
+                <div className="dropdown">
+                      <button className="dropbtn">
+                        {userAccount} <i className="fa fa-caret-down"></i>
+                      </button>
+
+                      <div className="dropdown-content">
+                        <button onClick={find_user}>
+                            View your channel</button>
+                        <button>Link 2</button>
+                        <button>Link 3</button>
+                      </div>
+                </div>
+                {/*<button onClick={find_user}>{userAccount}</button>*/}
+                <button
+                    onClick={() => {
+                        localStorage.clear();
+                        setToken(null);
+                    }}
+                >
+                    {signout}
+                </button>
+            </>
+        ) : (
+            <Link to="/sign-in">{signin}</Link>
+        )}
+      </div>
+    </nav>
+  );
 }
