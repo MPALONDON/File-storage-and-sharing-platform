@@ -1,10 +1,14 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, useRef} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import VideoLikeButton from "../home/VideoLikeButton.jsx"
+import { hasWatchedThreshold } from "./video logic.js";
+
 
 export default function Video(){
     const [video, setVideo] = useState({})
-    const [likesCount, setLikesCount] = useState(0)
+    const [currentWatchTime, setWatchTime] = useState(false)
+
+    const videoRef = useRef(null)
 
     const token = localStorage.getItem("token")
 
@@ -13,6 +17,18 @@ export default function Video(){
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const v = queryParams.get("v");
+
+    const handlePlay = () => {
+    if (hasWatchedThreshold(videoRef.current, 30)) {
+    setWatchTime(true);
+  }
+};
+
+ const handlePause = () => {
+  if (hasWatchedThreshold(videoRef.current, 30)) {
+    setWatchTime(true);
+  }
+};
 
 
     useEffect(()=>{
@@ -33,12 +49,14 @@ export default function Video(){
 
     return(
         <div>
-        <video
+        <video ref={videoRef}
             key={video.url}
         width="470"
         height="255"
         poster={video.thumbnail}
         controls
+               onPlay={currentWatchTime ? undefined : handlePlay}
+        onPause={currentWatchTime ? undefined : handlePause}
         onClick={(e) => e.stopPropagation()}
       >
         <source src={video.url} type="video/mp4" />
@@ -58,7 +76,7 @@ export default function Video(){
       </p>
 
       <p>{video.views} views</p>
-            <VideoLikeButton video={video}>
+            <VideoLikeButton video={video} setVideo={setVideo}>
 
             </VideoLikeButton>
 

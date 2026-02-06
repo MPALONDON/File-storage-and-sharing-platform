@@ -215,17 +215,6 @@ def login(user:UserLogin,session:Session = Depends(get_session)):
 def get_user(user=Depends(manager)):
     return user
 
-@app.post("/add-like")
-def add_like(request: LikeRequest, user=Depends(manager), session:Session = Depends(get_session)):
-    video = session.execute(select(Video).where(Video.id==request.video_id)).scalar_one_or_none()
-    new_like = VideoLike(user_id=user.id, video_id=request.video_id)
-    video.likes.append(new_like)
-
-    session.add(new_like)
-    session.commit()
-    print(len(video.likes))
-    return {"message": "Video liked successfully", "likes_count": len(video.likes)}
-
 
 @app.post("/user/upload-file")
 async def upload_file(title: str = Form(...),description: str = Form(...),file: UploadFile = File(...),
@@ -257,19 +246,27 @@ async def upload_file(title: str = Form(...),description: str = Form(...),file: 
         "message": "Upload successful",
         "filename": file.filename
     }
+
+@app.post("/add-like")
+def add_like(request: LikeRequest, user=Depends(manager), session:Session = Depends(get_session)):
+    video = session.execute(select(Video).where(Video.id==request.video_id)).scalar_one_or_none()
+    new_like = VideoLike(user_id=user.id, video_id=request.video_id)
+    video.likes.append(new_like)
+
+    session.add(new_like)
+    session.commit()
+    print(len(video.likes))
+    return {"message": "Video liked successfully", "likes": video.likes}
 @app.get("/all/videos",response_model=list[AllVideos])
 def get_all_videos(session:Session = Depends(get_session)):
     videos = session.execute(select(Video)).scalars().all()
     return videos
-
-
-@app.get("/all/files")
-def user_files(session:Session = Depends(get_session)):
-    pass
-
 @app.get("/video",response_model=FindVideo)
 def get_video(id:int,session:Session = Depends(get_session)):
     video = session.execute(select(Video).where(Video.id == id)).scalar_one_or_none()
+    video.views +=1
+    session.commit()
+    session.refresh(video)
     return video
 
 

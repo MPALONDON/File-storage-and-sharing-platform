@@ -6,6 +6,7 @@
 
 body {
   font-family: Arial, sans-serif;
+  background-color: #0f0f0f;
 }
 
 .main_container {
@@ -270,11 +271,13 @@ body {
 .container_videos{
   display: flex;
   flex-wrap: wrap;
+  gap: 15px;
 }
 
 .container_videos li {
   list-style: none;
   width: 470px;
+  margin-bottom: 50px;
 }
 
 .video-wrapper {
@@ -282,12 +285,18 @@ body {
   height: 255px;
   background: black;
   overflow: hidden;
+  border-radius: 3%;
+
 }
 
 .video-thumb {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.like_button_active{
+  background-color: green;
 }
 
 

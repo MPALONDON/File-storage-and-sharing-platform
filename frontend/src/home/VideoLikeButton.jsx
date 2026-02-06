@@ -1,7 +1,8 @@
 import {useState} from "react";
 
-export default function VideoLikeButton({ video }){
-        const [currentLikes,setLikes] = useState(null)
+export default function VideoLikeButton({ video, setVideo }){
+
+    const token = localStorage.getItem("token")
 
         async function addLike(){
 
@@ -15,14 +16,18 @@ export default function VideoLikeButton({ video }){
 
     )
       const data = await response.json()
-        setLikes(data);
+        setVideo(prev => ({
+      ...prev,
+      likes: data.likes,
+            message: data.message
+
+    }));
 
   }
 
     return(
-
-        <button onClick={addLike}>
-            <span>{video.likes?.length ?? 0}  👍</span>
+        <button className={video.message? "like_button_active" : undefined} onClick={addLike}>
+            <span>{video.likes?.length}  👍</span>
         </button>
         )
 }
