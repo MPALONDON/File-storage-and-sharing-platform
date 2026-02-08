@@ -20,15 +20,8 @@ class UserExists(BaseModel):
 class GetUsername(BaseModel):
     username:str
 
-class VideoCreate(BaseModel):
-    title:str = Field(...)
-    description:str = Field(...)
-
 class GetUser(BaseModel):
     username:str
-
-class GetId(BaseModel):
-    id:int
 
 class AllVideos(BaseModel):
     id:int
@@ -44,10 +37,11 @@ class AllVideos(BaseModel):
 class VideoLikes(BaseModel):
     user_id:int
 
-
-
 class FindVideo(AllVideos):
     likes:list[VideoLikes]
 
 class LikeRequest(BaseModel):
     video_id: int
+
+class ProcessView(BaseModel):
+    id:int = Field(...)

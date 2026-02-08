@@ -1,16 +1,22 @@
 import {use, useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 export default function Home(){
     const [videos,setVideos] = useState([])
 
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const queryParams = new URLSearchParams(location.search);
+    const searchQuery = queryParams.get("search_query");
+    console.log(searchQuery)
 
 
 
     useEffect(()=>{
         const fetchData = async ()=>{
-        const response = await fetch("http://127.0.0.1:8000/all/videos", {
+            let endpoint = searchQuery!== null ? `?search_query=${searchQuery}` : ""
+        const response = await fetch(`http://localhost:8000/all/videos${endpoint}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -21,25 +27,24 @@ export default function Home(){
 
     };
     fetchData()
-    },[])
+    },[searchQuery])
 
     return (
 
   <div className="container_videos">
 
   {videos.map((video) => (
+      <div key={video.url} onClick={() => navigate(`watch?v=${video.id}`)}>
     <li
-      key={video.url}
-      onClick={() => navigate(`watch?v=${video.id}`)}
       style={{ cursor: "pointer" }}
     >
         <div className="video-wrapper">
       <video className="video-thumb"
+             controlsList="nodownload"
+
 
 
         poster={video.thumbnail}
-        controls
-        onClick={(e) => e.stopPropagation()}
       >
         <source src={video.url} type="video/mp4" />
       </video>
@@ -60,6 +65,7 @@ export default function Home(){
 
       <p>{video.views} views</p>
     </li>
+          </div>
   ))}
 </div>
 );

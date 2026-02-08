@@ -2,16 +2,15 @@ import {useState} from "react";
 
 export default function VideoLikeButton({ video, setVideo }){
 
-    const token = localStorage.getItem("token")
-
         async function addLike(){
 
       const response = await fetch("http://127.0.0.1:8000/add-like", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
-      },body:JSON.stringify({video_id:video.id})
+      },
+          credentials: "include",
+          body:JSON.stringify({video_id:video.id})
       }
 
     )

@@ -2,6 +2,7 @@ import {useEffect, useState, useRef} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import VideoLikeButton from "../home/VideoLikeButton.jsx"
 import { hasWatchedThreshold } from "./video logic.js";
+import Header from "../header/Header.jsx";
 
 
 export default function Video(){
@@ -9,8 +10,6 @@ export default function Video(){
     const [currentWatchTime, setWatchTime] = useState(false)
 
     const videoRef = useRef(null)
-
-    const token = localStorage.getItem("token")
 
     const navigate = useNavigate();
 
@@ -21,13 +20,22 @@ export default function Video(){
     const handlePlay = () => {
     if (hasWatchedThreshold(videoRef.current, 30)) {
     setWatchTime(true);
-  }
-};
+    console.log("watch time reached")
 
- const handlePause = () => {
-  if (hasWatchedThreshold(videoRef.current, 30)) {
-    setWatchTime(true);
+        const processLike = async () => {
+        const response = await fetch("http://127.0.0.1:8000/process-view", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },body:JSON.stringify({id:video.id})
+      }
+
+    )
+      const data = await response.json()
+
   }
+  processLike()
+    }
 };
 
 
@@ -47,7 +55,10 @@ export default function Video(){
     },[])
 
 
-    return(
+    return(<>
+        <Header sidebar = "icon1" homepage="YouTube" signin= "Sign In" signout="Sign-out" userAccount="My account">
+
+        </Header>
         <div>
         <video ref={videoRef}
             key={video.url}
@@ -55,8 +66,7 @@ export default function Video(){
         height="255"
         poster={video.thumbnail}
         controls
-               onPlay={currentWatchTime ? undefined : handlePlay}
-        onPause={currentWatchTime ? undefined : handlePause}
+               onTimeUpdate={currentWatchTime ? undefined : handlePlay}
         onClick={(e) => e.stopPropagation()}
       >
         <source src={video.url} type="video/mp4" />
@@ -81,5 +91,6 @@ export default function Video(){
             </VideoLikeButton>
 
             </div>
+        </>
     )
 }

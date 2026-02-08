@@ -20,6 +20,7 @@ function App() {
         <Route path="/sign-in" element={<SignIn />} />
           <Route path="/:username" element={<MyAccount />} />
           <Route path="/watch" element={<Video />} />
+          <Route path="/results" element={<Home />} />
 
         {/*<Route path="*" element={<NotFound />} />*/}
       </Routes>

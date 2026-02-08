@@ -2,7 +2,6 @@ import {useDropzone} from 'react-dropzone'
 import {useState} from "react";
 
 export default function UploadForm(){
-    const token = localStorage.getItem("token")
 
     async function uploadVideo(event){
         event.preventDefault();
@@ -11,13 +10,19 @@ export default function UploadForm(){
 
 
         const response = await fetch(
-                "http://127.0.0.1:8000/user/upload-file",{
+                "http://localhost:8000/user/upload-file",{
                     method: "POST",
                     headers: {
-                        "Authorization": `Bearer ${token}`,
-                  }, body: formData,
+                  },
+                credentials : "include",
+                body: formData,
+
                 });
+                if (response.ok) {
                     const data = await response.json()
+                }else{
+                    throw new Error(`HTTP ERROR! Status: ${response.status}`)
+                }
     }
 
     return(

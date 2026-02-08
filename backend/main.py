@@ -1,11 +1,11 @@
 from uuid import UUID
 
-from fastapi import FastAPI,Depends,HTTPException,status,File,UploadFile,Form
+from fastapi import FastAPI,Depends,HTTPException,status,File,UploadFile,Form,Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_login import LoginManager
 from pathlib import Path
 import sqlalchemy
-from sqlalchemy import create_engine,String,Integer,ForeignKey,UUID,Text,DateTime,select
+from sqlalchemy import create_engine,String,Integer,ForeignKey,UUID,Text,DateTime,select,or_
 from sqlalchemy.orm import DeclarativeBase, Mapped,mapped_column,relationship, Session
 import uuid
 from datetime import datetime
@@ -20,10 +20,9 @@ from backend.pydantic_classes.validation import UserPost
 from backend.pydantic_classes.validation import GetUsername
 from backend.pydantic_classes.validation import AllVideos
 from backend.pydantic_classes.validation import FindVideo
-from backend.pydantic_classes.validation import GetId
-from backend.pydantic_classes.validation import VideoCreate
 from backend.pydantic_classes.validation import LikeRequest
 from backend.imagekit_client import upload_video,upload_thumbnail
+from backend.pydantic_classes.validation import ProcessView
 
 db_folder = Path.cwd() / "instance"
 db_folder.mkdir(exist_ok=True)
@@ -185,14 +184,14 @@ def user_exists(user:UserExists, session:Session = Depends(get_session)):
 
 load_dotenv()
 
-manager = LoginManager(os.getenv("SECRET_KEY"), token_url="/login")
+manager = LoginManager(os.getenv("SECRET_KEY"), token_url="/login", use_cookie=True,use_header=False)
 
 @manager.user_loader()
 def get_user_id(user_id:str):
     with Session(engine) as session:
         return session.get(User, int(user_id))
 @app.post("/login")
-def login(user:UserLogin,session:Session = Depends(get_session)):
+def login(response:Response,user:UserLogin,session:Session = Depends(get_session)):
     database_user = session.execute(select(User).where(User.email == user.email)).scalar_one_or_none()
     if not database_user:
         raise HTTPException(
@@ -209,11 +208,18 @@ def login(user:UserLogin,session:Session = Depends(get_session)):
         )
     access_token = manager.create_access_token(data={"sub": str(database_user.id)})
     print(access_token)
-    return {"access_token": access_token, "token_type": "bearer"}
+    manager.set_cookie(response,access_token)
+    response.status_code = status.HTTP_200_OK
+    return response
 
 @app.get("/username",response_model=GetUsername)
 def get_user(user=Depends(manager)):
     return user
+
+@app.get("/logout")
+def get_user(response:Response):
+    response.delete_cookie(key="access-token")
+    return {"status":"logged-out"}
 
 
 @app.post("/user/upload-file")
@@ -257,14 +263,32 @@ def add_like(request: LikeRequest, user=Depends(manager), session:Session = Depe
     session.commit()
     print(len(video.likes))
     return {"message": "Video liked successfully", "likes": video.likes}
+
 @app.get("/all/videos",response_model=list[AllVideos])
-def get_all_videos(session:Session = Depends(get_session)):
+def get_all_videos(search_query:str | None=None,session:Session = Depends(get_session)):
+    if search_query:
+        search = f"%{search_query}%"
+
+        videos = session.execute(select(Video).join(Video.uploader, isouter=True).where(
+            (Video.title.ilike(search) | Video.description.ilike(search) | User.username.ilike(search)
+            )
+        )).scalars().all()
+        return videos
+
     videos = session.execute(select(Video)).scalars().all()
+    if not videos:
+        raise HTTPException(404,"no videos found")
     return videos
+
 @app.get("/video",response_model=FindVideo)
 def get_video(id:int,session:Session = Depends(get_session)):
     video = session.execute(select(Video).where(Video.id == id)).scalar_one_or_none()
-    video.views +=1
+    return video
+
+@app.post("/process-view")
+def process_view(video:ProcessView,session:Session = Depends(get_session)):
+    video = session.execute(select(Video).where(Video.id == video.id)).scalar_one_or_none()
+    video.views += 1
     session.commit()
     session.refresh(video)
     return video
@@ -273,5 +297,6 @@ def get_video(id:int,session:Session = Depends(get_session)):
 
 
 
+
 if __name__ == "__main__":
-    uvicorn.run(app)
+    uvicorn.run(app,host="localhost")
