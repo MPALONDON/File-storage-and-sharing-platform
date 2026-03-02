@@ -14,6 +14,8 @@ import uvicorn
 import os
 from dotenv import load_dotenv
 
+from backend.imagekit_client import upload_video,upload_thumbnail
+
 from backend.pydantic_classes.validation import UserExists
 from backend.pydantic_classes.validation import UserLogin
 from backend.pydantic_classes.validation import UserPost
@@ -21,8 +23,10 @@ from backend.pydantic_classes.validation import GetUsername
 from backend.pydantic_classes.validation import AllVideos
 from backend.pydantic_classes.validation import FindVideo
 from backend.pydantic_classes.validation import LikeRequest
-from backend.imagekit_client import upload_video,upload_thumbnail
 from backend.pydantic_classes.validation import ProcessView
+from backend.pydantic_classes.validation import AddComment
+from backend.pydantic_classes.validation import GetComments
+from backend.pydantic_classes.validation import DeleteComment
 
 db_folder = Path.cwd() / "instance"
 db_folder.mkdir(exist_ok=True)
@@ -256,13 +260,19 @@ async def upload_file(title: str = Form(...),description: str = Form(...),file: 
 @app.post("/add-like")
 def add_like(request: LikeRequest, user=Depends(manager), session:Session = Depends(get_session)):
     video = session.execute(select(Video).where(Video.id==request.video_id)).scalar_one_or_none()
+    for like in video.likes:
+        if like.user_id == user.id:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="already liked",
+            )
     new_like = VideoLike(user_id=user.id, video_id=request.video_id)
     video.likes.append(new_like)
 
     session.add(new_like)
     session.commit()
     print(len(video.likes))
-    return {"message": "Video liked successfully", "likes": video.likes}
+    return {"message": "Video liked successfully", "likes": video.likes,"user": user}
 
 @app.get("/all/videos",response_model=list[AllVideos])
 def get_all_videos(search_query:str | None=None,session:Session = Depends(get_session)):
@@ -283,15 +293,31 @@ def get_all_videos(search_query:str | None=None,session:Session = Depends(get_se
 @app.get("/video",response_model=FindVideo)
 def get_video(id:int,session:Session = Depends(get_session)):
     video = session.execute(select(Video).where(Video.id == id)).scalar_one_or_none()
+    video.comments.sort(reverse=True,key=lambda c: c.created_at)
     return video
 
-@app.post("/process-view")
+@app.patch("/process-view")
 def process_view(video:ProcessView,session:Session = Depends(get_session)):
     video = session.execute(select(Video).where(Video.id == video.id)).scalar_one_or_none()
     video.views += 1
     session.commit()
     session.refresh(video)
     return video
+
+@app.post("/add-comment",response_model=GetComments)
+def add_comment(comment:AddComment ,user = Depends(manager),session:Session = Depends(get_session)):
+    comment = Comment(text=comment.text,video_id=comment.video_id,author_id=user.id)
+    session.add(comment)
+    session.commit()
+    session.refresh(comment)
+    return comment
+
+@app.delete("/delete-comment")
+def delete_comment(comment:DeleteComment,user = Depends(manager),session:Session = Depends(get_session)):
+    comment = session.execute(select(Comment).where(Comment.id==comment.id)).scalar_one_or_none()
+    session.delete(comment)
+    session.commit()
+    return {"status":"deleted"}
 
 
 

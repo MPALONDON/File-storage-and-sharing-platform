@@ -37,9 +37,9 @@ export default function UploadForm(){
                     <label>Video Description:
                         <input name="description" type="text" id="video-description"/>
                     </label>
-                    <label>Upload Thumbnail
+                    <label>Upload Thumbnail</label>
                     <input name="thumbnail" type="file"/>
-                    </label>
+
                     <button type="submit">
                         Submit Video
                     </button>

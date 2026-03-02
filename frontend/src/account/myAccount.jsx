@@ -8,7 +8,6 @@ export default function myAccount(){
 
     const [currentUser, setCurrentUser] = useState({})
 
-    const token = localStorage.getItem("token")
 
     useEffect(()=>{
         const fetchData = async ()=>{
@@ -39,6 +38,7 @@ export default function myAccount(){
          <Header sidebar = "icon1" homepage="YouTube" signin= "Sign In" signout="Sign-out" userAccount="My account">
 
          </Header>
+            
             {currentUser?.username === username ? <UploadForm>
 
 

@@ -272,6 +272,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
+  margin-top: 10px;
 }
 
 .container_videos li {
@@ -285,7 +286,7 @@ body {
   height: 255px;
   background: black;
   overflow: hidden;
-  border-radius: 3%;
+  border-radius: 10px;
 
 }
 
@@ -297,6 +298,127 @@ body {
 
 .like_button_active{
   background-color: green;
+}
+.comment-container{
+  margin-top: 20px;
+}
+
+.comment-container li{
+  list-style: none;
+}
+
+.user-handle{
+  font-weight: bold;
+}
+.user-handle:hover{
+  cursor: pointer;
+}
+
+.comment-time{
+  font-size: 15px;
+  font-style: italic;
+  color:grey;
+}
+
+.btn.delete-comment{
+  background-color: white;
+  color: black;
+  margin-left: 20px;
+  border-radius: 10%;
+  padding:3px;
+}
+.btn.delete-comment:hover{
+  background-color: black;
+  color: white;
+  cursor: pointer;
+}
+
+.full-video-container{
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+
+}
+.left-container{
+  flex:5;
+  display: flex;
+  flex-direction: column;
+  padding-left: 20px;
+}
+.left-container > * {
+  width: 100%;
+}
+.right-container{
+    flex:1;
+  }
+
+.left-container .video_player{
+  height: 40%;
+}
+
+.right-container li.video-item {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  list-style: none;
+  align-items: flex-start;
+}
+.sidebar-video-wrapper {
+  flex-shrink: 0;
+  width: 150px;
+  height: 84px;
+}
+
+.right-container .video-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.uploaded_by_link{
+  color: white;
+}
+
+.video_uploader_link{
+  color: grey;
+}
+
+.video_uploader_link:hover{
+  color: white;
+}
+
+.left__uploaded_by{
+  font-weight: bold;
+}
+
+.left__uploaded_by:hover{
+  cursor: pointer;
+}
+
+.video-details{
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #3b3b3b;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.videos-views{
+  display: inline-block;
+}
+
+.views_upload-date {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.views_upload-date .seperator {
+  height: 3px;
+  width: 3px;
+  background-color: #bbb;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
 
 

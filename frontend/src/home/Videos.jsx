@@ -1,8 +1,10 @@
-import {use, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
+import {formatDistanceToNow} from "date-fns";
 
 export default function Home(){
     const [videos,setVideos] = useState([])
+    const [durations, setDurations] = useState({})
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -10,7 +12,8 @@ export default function Home(){
     const queryParams = new URLSearchParams(location.search);
     const searchQuery = queryParams.get("search_query");
     console.log(searchQuery)
-
+    console.log(queryParams)
+    console.log(location)
 
 
     useEffect(()=>{
@@ -29,41 +32,56 @@ export default function Home(){
     fetchData()
     },[searchQuery])
 
+    const handleLoadedMetadata = (id, event) => {
+    setDurations((prev) => ({
+      ...prev,
+      [id]: event.target.duration,
+    }));
+  };
+    const formatTime = (seconds) => {
+    if (!seconds) return "";
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
+
     return (
 
   <div className="container_videos">
 
   {videos.map((video) => (
       <div key={video.url} onClick={() => navigate(`watch?v=${video.id}`)}>
-    <li
-      style={{ cursor: "pointer" }}
+        <li
+        style={{ cursor: "pointer" }}
     >
         <div className="video-wrapper">
-      <video className="video-thumb"
+        <video className="video-thumb"
              controlsList="nodownload"
+               preload="metadata"
+                onLoadedMetadata={(e) => handleLoadedMetadata(video.id, e)}
 
-
-
-        poster={video.thumbnail}
+            poster={video.thumbnail}
       >
         <source src={video.url} type="video/mp4" />
-      </video>
+        </video>
         </div>
 
       <h3>{video.title}</h3>
-      <p>{video.description}</p>
+            <p>{formatTime(durations[video.id])}</p>
 
-      <p
+      <p className="video_uploader_link"
         onClick={(e) => {
           e.stopPropagation();
           navigate(`/${video.uploader.username}`);
         }}
-        style={{ color: "blue", textDecoration: "underline", cursor: "pointer" }}
       >
         {video.uploader.username}
       </p>
-
-      <p>{video.views} views</p>
+        <div className="views_upload-date">
+            <p>{video.views} views</p>
+            <span className="seperator"></span>
+            <p>{formatDistanceToNow(video.uploaded_at, { addSuffix: true })}</p>
+        </div>
     </li>
           </div>
   ))}

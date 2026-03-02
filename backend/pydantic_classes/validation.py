@@ -38,10 +38,26 @@ class VideoLikes(BaseModel):
     user_id:int
 
 class FindVideo(AllVideos):
+    id:int
     likes:list[VideoLikes]
+    comments:list[GetComments]
 
 class LikeRequest(BaseModel):
     video_id: int
 
 class ProcessView(BaseModel):
     id:int = Field(...)
+
+class AddComment(BaseModel):
+    text:str = Field(...)
+    video_id:int = Field(...)
+
+class GetComments(BaseModel):
+    id:int
+    text: str
+    author_id: int
+    comment_author: GetUser
+    created_at: datetime
+
+class DeleteComment(BaseModel):
+    id: int = Field(...)

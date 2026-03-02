@@ -2,9 +2,13 @@ import {useState} from "react";
 
 export default function VideoLikeButton({ video, setVideo }){
 
+    const currentUserId = video.user?.id;
+
+    const hasLiked = video.likes?.some(like => like.user_id === currentUserId);
+
         async function addLike(){
 
-      const response = await fetch("http://127.0.0.1:8000/add-like", {
+      const response = await fetch("http://localhost:8000/add-like", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -15,17 +19,23 @@ export default function VideoLikeButton({ video, setVideo }){
 
     )
       const data = await response.json()
+                if(response.status === 409){
+                    console.log("error")
+
+
+            }
         setVideo(prev => ({
       ...prev,
       likes: data.likes,
-            message: data.message
+            message: data.message,
+            user:data.user
 
     }));
 
   }
 
     return(
-        <button className={video.message? "like_button_active" : undefined} onClick={addLike}>
+        <button className={hasLiked ? "like_button_active" : undefined} onClick={addLike}>
             <span>{video.likes?.length}  👍</span>
         </button>
         )

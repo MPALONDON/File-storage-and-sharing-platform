@@ -6,7 +6,6 @@ import SignIn from "./signin/SignIn.jsx";
 import Register from "./register/Register.jsx";
 import MyAccount from "./account/myAccount.jsx";
 import Video from "./home/Video.jsx";
-
 import './App.css'
 
 function App() {
