@@ -64,10 +64,11 @@ export default function Home(){
       >
         <source src={video.url} type="video/mp4" />
         </video>
+            <p className="video-time">{formatTime(durations[video.id])}</p>
         </div>
 
       <h3>{video.title}</h3>
-            <p>{formatTime(durations[video.id])}</p>
+
 
       <p className="video_uploader_link"
         onClick={(e) => {

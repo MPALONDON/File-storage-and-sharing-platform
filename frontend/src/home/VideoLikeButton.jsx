@@ -35,8 +35,8 @@ export default function VideoLikeButton({ video, setVideo }){
   }
 
     return(
-        <button className={hasLiked ? "like_button_active" : undefined} onClick={addLike}>
-            <span>{video.likes?.length}  👍</span>
+        <button className={hasLiked ? "like_button active_like" : "like_button inactive_like"} onClick={addLike}>
+            <span>👍 {video.likes?.length}</span>
         </button>
         )
 }

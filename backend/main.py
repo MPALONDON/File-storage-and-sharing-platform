@@ -320,9 +320,5 @@ def delete_comment(comment:DeleteComment,user = Depends(manager),session:Session
     return {"status":"deleted"}
 
 
-
-
-
-
 if __name__ == "__main__":
     uvicorn.run(app,host="localhost")

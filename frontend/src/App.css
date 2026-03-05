@@ -7,6 +7,7 @@
 body {
   font-family: Arial, sans-serif;
   background-color: #0f0f0f;
+  padding-bottom: 50px;
 }
 
 .main_container {
@@ -16,6 +17,11 @@ body {
   padding: 10px 20px;
   background-color: #1a1a1a;
   color: white;
+  margin-bottom: 25px;
+  position: sticky;
+  z-index: 1000;
+  background-color: rgba(0,0,0,0.9);
+  top:0;
 }
 
 .nav_left a,
@@ -44,19 +50,19 @@ body {
   padding: 6px 10px;
   border-radius: 20px 0 0 20px;
   border: 1px solid grey;
-  flex: 1; /* flexible width */
-  min-width: 150px;
-  max-width: 300px;
+  width: 400px;
+  height: 40px;
 }
 
 .search_button {
-  padding: 6px 12px;
+  padding: 7px 12px;
   border-radius: 0 20px 20px 0;
   border: none;
   background-color: royalblue;
   color: white;
   cursor: pointer;
   transition: 0.3s;
+  height: 40px
 }
 
 .search_button:hover {
@@ -82,7 +88,6 @@ body {
   overflow: hidden;
 }
 
-
 .dropbtn {
   font-size: 16px;
   border: none;
@@ -95,11 +100,9 @@ body {
   cursor: pointer;
 }
 
-
 .navbar a:hover, .dropdown:hover .dropbtn {
   background-color: red;
 }
-
 
 .dropdown-content {
   display: none;
@@ -109,7 +112,6 @@ body {
   box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
   z-index: 1;
 }
-
 
 .dropdown-content button {
   width: 100%;
@@ -122,12 +124,10 @@ body {
   font-size: 14px;
 }
 
-
 .dropdown-content button:hover {
   background-color: #ddd;
 }
 
-/* Show dropdown on hover */
 .dropdown:hover .dropdown-content {
   display: block;
 }
@@ -137,7 +137,6 @@ body {
   height: 95vh;
   width: 100vw;
 }
-
 
 .auth_Container {
   flex: 1;
@@ -150,7 +149,6 @@ body {
   padding: 20px;
 }
 
-
 .auth_Form {
   display: flex;
   flex-direction: column;
@@ -158,7 +156,6 @@ body {
   width: 100%;
   max-width: 400px;
 }
-
 
 .auth_Container h1 {
   font-size: 48px;
@@ -179,14 +176,11 @@ body {
 .auth_Form a{
   text-decoration: none;
   color: grey;
-
 }
-
 
 .auth_Form h4{
   color:grey;
 }
-
 
 .auth_Form input {
   width: 100%;
@@ -197,7 +191,6 @@ body {
   background-color: #fdf5e2;
   color: black;
 }
-
 
 .auth_Form input:focus {
   outline: none;
@@ -212,7 +205,6 @@ body {
   border: 2px solid red;
 }
 
-
 .auth_Form input:-webkit-autofill,
 .auth_Form input:-webkit-autofill:hover,
 .auth_Form input:-webkit-autofill:focus,
@@ -220,8 +212,6 @@ body {
   -webkit-box-shadow: 0 0 0 30px #fdf5e2 inset;
   -webkit-text-fill-color: black;
 }
-
-
 
 .auth_Form .confirmation_errors {
   color: red;
@@ -233,7 +223,6 @@ body {
 .auth_Form .user_error {
   color: red;
 }
-
 
 .auth_Form button {
   padding: 12px;
@@ -273,6 +262,7 @@ body {
   flex-wrap: wrap;
   gap: 15px;
   margin-top: 10px;
+  padding-left: 20px;
 }
 
 .container_videos li {
@@ -287,7 +277,7 @@ body {
   background: black;
   overflow: hidden;
   border-radius: 10px;
-
+  min-height: 200px;
 }
 
 .video-thumb {
@@ -296,9 +286,27 @@ body {
   object-fit: cover;
 }
 
-.like_button_active{
+.like_button{
+  cursor: pointer;
+  padding: 10px 30px 10px 30px;
+  border-radius:20px 0 0 20px ;
+  background-color: #202020;
+}
+.like_button:hover{
+  background-color: #3b3b3b;
+}
+
+.active_like{
   background-color: green;
 }
+
+.dislike_button{
+  cursor: pointer;
+  padding: 10px 30px 10px 30px;
+  border-radius:0 20px 20px 0 ;
+  background-color: #202020;
+}
+
 .comment-container{
   margin-top: 20px;
 }
@@ -307,25 +315,74 @@ body {
   list-style: none;
 }
 
+.comment_input{
+  width: 100%;
+  background-color: #0f0f0f;
+  border: none;
+  border-bottom: 1px solid white;
+  height: 30px;
+  padding-left: 5px;
+  transition: 0.2s;
+}
+
+.comment_input.active{
+  height: 40px;
+  border-bottom: 2px solid white;
+  transition: 0.2s;
+
+}
+
+.comment-btns-container-flex{
+  display: flex;
+}
+
+.comment-btns-container{
+  margin-left: auto;
+  margin-top: 5px;
+}
+
+.comment-btns-container .btn{
+  cursor: pointer;
+  padding: 10px 20px 10px 20px;
+  border-radius: 20px 20px 20px 20px;
+  background-color: #202020;
+}
+
+.comment-btns-container .btn:hover {
+  background-color: #3b3b3b;
+}
+
+.comment-btns-container .btn.inactive{
+  cursor: default;
+  background-color: #202020;
+}
+
 .user-handle{
   font-weight: bold;
+  display: inline-block;
 }
 .user-handle:hover{
   cursor: pointer;
 }
 
+.author-header{
+  display: flex;
+
+}
 .comment-time{
   font-size: 15px;
   font-style: italic;
   color:grey;
+  display: inline-block;
+  margin-left: 10px;
 }
 
 .btn.delete-comment{
   background-color: white;
   color: black;
-  margin-left: 20px;
   border-radius: 10%;
   padding:3px;
+  margin-left: auto;
 }
 .btn.delete-comment:hover{
   background-color: black;
@@ -341,19 +398,19 @@ body {
 }
 .left-container{
   flex:5;
-  display: flex;
-  flex-direction: column;
+  /*display: flex;
+  flex-direction: column;*/
   padding-left: 20px;
-}
-.left-container > * {
-  width: 100%;
 }
 .right-container{
     flex:1;
   }
 
 .left-container .video_player{
-  height: 40%;
+  width: 100%;
+  height: 750px;
+  /*object-fit: cover;*/
+  border-radius: 10px;
 }
 
 .right-container li.video-item {
@@ -381,6 +438,7 @@ body {
 
 .video_uploader_link{
   color: grey;
+  width: fit-content;
 }
 
 .video_uploader_link:hover{
@@ -402,6 +460,10 @@ body {
   border-radius: 10px;
   margin-bottom: 20px;
 }
+.video-details:hover{
+  background-color: rgba(54, 25, 10, 1.000);
+  cursor: pointer;
+}
 
 .videos-views{
   display: inline-block;
@@ -421,6 +483,100 @@ body {
   flex-shrink: 0;
 }
 
+.main_container input[type="search"]::-webkit-search-cancel-button {
+  cursor: pointer;
+}
 
+.user__likes {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
+.user__likes .left__uploaded_by{
 
+  justify-content: left;
+}
+
+.video-wrapper{
+  position: relative;
+}
+
+.video-time{
+  font-size: 12px;
+  font-weight: bold;
+  background-color: #222021;
+  padding-left: 4px;
+  position: absolute;
+  top: 90%;
+  left: 90%;
+  right: auto;
+  width: 32px;
+  border-radius: 4px;
+}
+
+.upload-container{
+  display: flex;
+  height: 91vh;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.upload-background{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #202020;
+  padding: 150px;
+  border-radius: 20px;
+}
+
+.upload-container h1{
+  justify-content: center;
+  font-size: 40px;
+  margin-bottom: 30px;
+}
+
+.upload_Form{
+  display: flex;
+  gap: 50px;
+  flex-direction: column;
+
+}
+
+.upload_Form input{
+  width: 100%;
+  font-size: 16px;
+  padding: 12px;
+  border-radius: 5px;
+  border: none;
+
+}
+.upload_Form button{
+  padding: 12px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.upload_Form button:hover{
+  background-color: white;
+  color: gray;
+  transition: 0.2s;
+  border: 2px solid gray;
+}
+
+.upload_Form input[type="file"]::file-selector-button {
+  border: 2px solid white;
+  padding: 0.2em 0.4em;
+  border-radius: 5px;
+  background-color: gray;
+}
+
+.upload_Form input[type="file"]::file-selector-button:hover {
+  background-color: white;
+  color: gray;
+  border: 2px solid gray;
+  transition: 0.2s;
+  cursor: pointer;
+}

@@ -71,7 +71,7 @@ export default function Header({ sidebar, homepage, signin, signout, userAccount
 
     navigate(`${searchQuery ? `?search_query=${searchQuery}` : ""}`);
           }}>
-        <input name="search_query" className="search_bar" placeholder="Search" />
+        <input id="search" type="search" name="search_query" className="search_bar" placeholder="Search" />
         <button className="search_button">Search</button>
               </form>
       </div>

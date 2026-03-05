@@ -26,10 +26,12 @@ export default function UploadForm(){
     }
 
     return(
-            <div>
-                <form onSubmit={(event)=>uploadVideo(event)} className="auth_Form" encType="multipart/form-data">
+            <div className="upload-container">
+                <div className="upload-background">
+                <h1>Upload Videos</h1>
+                <form onSubmit={(event)=>uploadVideo(event)} className="upload_Form" encType="multipart/form-data">
                     <label>Upload Video
-                    <input name="file" type="file" />
+                        <input name="file" type="file" multiple/>
                     </label>
                     <label>Video Title:
                         <input name="title" type="text" id="video-title"/>
@@ -37,8 +39,10 @@ export default function UploadForm(){
                     <label>Video Description:
                         <input name="description" type="text" id="video-description"/>
                     </label>
-                    <label>Upload Thumbnail</label>
-                    <input name="thumbnail" type="file"/>
+                    <label>Upload Thumbnail
+                        <input name="thumbnail" type="file" accept="image/*"/>
+
+                    </label>
 
                     <button type="submit">
                         Submit Video
@@ -46,5 +50,6 @@ export default function UploadForm(){
                 </form>
 
             </div>
+                </div>
     )
 }

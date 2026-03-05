@@ -39,7 +39,8 @@ export default function myAccount(){
 
          </Header>
             
-            {currentUser?.username === username ? <UploadForm>
+            {currentUser?.username === username ?
+                <UploadForm>
 
 
                 </UploadForm>

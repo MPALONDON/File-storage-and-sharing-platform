@@ -2,8 +2,10 @@ import {useEffect, useState, useRef} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import VideoLikeButton from "../home/VideoLikeButton.jsx"
 import { hasWatchedThreshold } from "./video logic.js";
+import SideVideos from "../sidevideos/SideVideos.jsx";
 import Header from "../header/Header.jsx";
 import Comments from "../comments/Comments.jsx";
+import VideoDislikeButton from "./VideoDislikeButton.jsx";
 import {formatDistanceToNow} from "date-fns";
 
 
@@ -83,10 +85,9 @@ export default function Video(){
 
                 <video className="video_player" ref={videoRef}
                     key={video.url}
-                width="470"
-                height="255"
                 poster={video.thumbnail}
                 controls
+                       controlsList="nodownload"
                        onTimeUpdate={currentWatchTime ? undefined : handlePlay}
                 onClick={(e) => e.stopPropagation()}
               >
@@ -94,6 +95,9 @@ export default function Video(){
                 </video>
 
                   <h1>{video.title}</h1>
+
+                <div className="user__likes">
+
                 <p className= "left__uploaded_by"
                     onClick={(e) => {
                       e.stopPropagation();
@@ -102,9 +106,17 @@ export default function Video(){
                   >
                     {video.uploader?.username}
                   </p>
+
+                    <div className="like_dislike">
                     <VideoLikeButton video={video} setVideo={setVideo}>
 
                     </VideoLikeButton>
+
+                    <VideoDislikeButton>
+
+                    </VideoDislikeButton>
+                    </div>
+                </div>
                     <div className="video-details">
                         <p>{video.views} views</p>
 
@@ -115,52 +127,18 @@ export default function Video(){
 
                     </div>
 
-
                     <div className="comments">
                         <Comments video= {video}>
 
                         </Comments>
-                </div>
+                    </div>
 
 
-                </div>
-            <div className="right-container">
-                 {videos.map((video) => (
-                  <div key={video.url} onClick={() => window.location.href = `/watch?v=${video.id}`}>
-                    <li className="video-item"
-                      style={{ cursor: "pointer" }}
-                    >
-                        <div className="sidebar-video-wrapper">
-                      <video className="video-thumb"
-                             controlsList="nodownload"
-
-
-
-                        poster={video.thumbnail}
-                      >
-                        <source src={video.url} type="video/mp4" />
-                      </video>
-                        </div>
-                        <div className="video-info">
-                      <h3>{video.title}</h3>
-
-                      <p className="video_uploader_link"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          navigate(`/${video.uploader.username}`);
-                        }}
-                      >
-                        {video.uploader.username}
-                      </p>
-
-                      <p>{video.views} views</p>
-                            </div>
-                    </li>
-          </div>
-  ))}
 
             </div>
+            <SideVideos videos={videos}>
 
+            </SideVideos>
 
             </div>
 
