@@ -1,42 +1,47 @@
-import {useState} from "react";
+import {useNavigate} from "react-router-dom";
+import LikeSvg from "../assets/LikeSVG.jsx";
 
-export default function VideoLikeButton({ video, setVideo }){
+export default function VideoLikeButton({ video, setVideo, currentUser }){
 
-    const currentUserId = video.user?.id;
+    const hasLiked = video.likes?.some(like => like.user_id === currentUser)
 
-    const hasLiked = video.likes?.some(like => like.user_id === currentUserId);
+    const navigate = useNavigate();
 
-        async function addLike(){
+    async function addLike(){
+        const response = await fetch("http://localhost:8000/process-like", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({video_id: video.id})
+        })
 
-      const response = await fetch("http://localhost:8000/add-like", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-          credentials: "include",
-          body:JSON.stringify({video_id:video.id})
-      }
+        const data = await response.json()
 
-    )
-      const data = await response.json()
-                if(response.status === 409){
-                    console.log("error")
+        if(response.status === 401){
+            navigate("/sign-in")
+        }
 
-
-            }
-        setVideo(prev => ({
-      ...prev,
-      likes: data.likes,
-            message: data.message,
-            user:data.user
-
-    }));
-
-  }
+        if(hasLiked){
+            setVideo(prev => ({
+                ...prev,
+                likes: prev.likes.filter(like => like.user_id !== currentUser),
+                likes_count: data.likes
+            }))
+        } else {
+            setVideo(prev => ({
+                ...prev,
+                likes: [...prev.likes, { user_id: currentUser }],
+                likes_count: data.likes
+            }))
+        }
+    }
 
     return(
-        <button className={hasLiked ? "like_button active_like" : "like_button inactive_like"} onClick={addLike}>
-            <span>👍 {video.likes?.length}</span>
+        <button title="Like"
+            className={hasLiked ? "like_button active_like" : "like_button inactive_like"}
+            onClick={addLike}
+        >
+            <span><LikeSvg></LikeSvg> {video.likes_count === null ? 0 : video.likes_count}</span>
         </button>
-        )
+    )
 }

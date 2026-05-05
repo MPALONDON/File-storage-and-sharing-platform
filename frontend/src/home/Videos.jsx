@@ -18,7 +18,7 @@ export default function Home(){
 
     useEffect(()=>{
         const fetchData = async ()=>{
-            let endpoint = searchQuery!== null ? `?search_query=${searchQuery}` : ""
+            let endpoint = searchQuery?.trim() ? `?search_query=${searchQuery}` : ""
         const response = await fetch(`http://localhost:8000/all/videos${endpoint}`, {
       method: "GET",
       headers: {

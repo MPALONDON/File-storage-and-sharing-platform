@@ -40,6 +40,7 @@ class VideoLikes(BaseModel):
 class FindVideo(AllVideos):
     id:int
     likes:list[VideoLikes]
+    likes_count: int = 0
     comments:list[GetComments]
 
 class LikeRequest(BaseModel):
@@ -61,3 +62,5 @@ class GetComments(BaseModel):
 
 class DeleteComment(BaseModel):
     id: int = Field(...)
+
+

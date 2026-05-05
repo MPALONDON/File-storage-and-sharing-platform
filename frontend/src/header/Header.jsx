@@ -1,7 +1,8 @@
 import { Link ,useNavigate} from "react-router-dom";
 import { useState ,useEffect} from "react";
+import SearchSvg from "../assets/SearchSvg.jsx";
 
-export default function Header({ sidebar, homepage, signin, signout, userAccount }) {
+export default function Header({ sidebar, homepage, isSignInPage, signin, signout, userAccount }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [username, setUsername] = useState(null);
 
@@ -72,7 +73,8 @@ export default function Header({ sidebar, homepage, signin, signout, userAccount
     navigate(`${searchQuery ? `?search_query=${searchQuery}` : ""}`);
           }}>
         <input id="search" type="search" name="search_query" className="search_bar" placeholder="Search" />
-        <button className="search_button">Search</button>
+        <button className="search_button">
+            <SearchSvg></SearchSvg></button>
               </form>
       </div>
 
@@ -97,9 +99,9 @@ export default function Header({ sidebar, homepage, signin, signout, userAccount
                     {signout}
                 </button>
             </>
-        ) : (
+        ) : !isSignInPage ?(
             <Link to="/sign-in">{signin}</Link>
-        )}
+        ) : null}
       </div>
     </nav>
   );

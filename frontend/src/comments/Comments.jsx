@@ -1,13 +1,18 @@
 import {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import { formatDistanceToNow } from 'date-fns';
+import CommentLike from "./CommentLike.jsx";
+import CommentDislike from "./CommentDislike.jsx";
+import CommentReply from "./CommentReply.jsx";
 
-export default function Comments({video}){
+export default function Comments({video,videoID}){
     const [commentData, setCommentData] = useState([])
     const navigate = useNavigate();
     const [currentUser, setCurrentUser] = useState(null)
     const [inputClick,setInputClick] = useState(false)
     const [currentComment, setCurrentComment] = useState("")
+
+
 
     console.log(currentUser)
 
@@ -68,9 +73,37 @@ export default function Comments({video}){
         setCommentData(prev => prev.filter(c => c.id !== comment.id));
     }
 
+    const handleSort = async (e)=>{
+        const video_id = {video_id : videoID}
+        const searchParams = new URLSearchParams(video_id);
+        searchParams.append("sort_by",e.target.value)
+        const queryString = searchParams.toString()
+        console.log(queryString)
+        const response = await fetch(`http://localhost:8000/sort-comments?${queryString}`,{
+            method: "GET",
+            headers:{
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+        })
+
+        const data = await response.json()
+        if(!response.ok){
+            throw(response.status)
+        }
+        setCommentData(data)
+    }
+
     return(
         <div>
-            <h1>{commentData.length} Comments</h1>
+            <div className="Comment-filter-row">
+                <h1>{commentData.length} Comments</h1>
+                <select title="Sort Comments" onChange={(e)=>handleSort(e)} className="comment-sortBy" name="sortBy">
+                    <option value="Newest">Newest</option>
+                    <option value="Top">Top Comments</option>
+
+                </select>
+            </div>
             <form onSubmit={(event)=>addComment(event)}>
                 <label>
                     <input className={inputClick? "comment_input active" : "comment_input"} name="comment_input"
@@ -111,6 +144,16 @@ export default function Comments({video}){
                             <p>
                             {comment.text}
                                 </p>
+                            <div className="comment-engagement-bar">
+                                <CommentLike>
+                                </CommentLike>
+
+                                <CommentDislike>
+                                </CommentDislike>
+
+                                <CommentReply>
+                                </CommentReply>
+                            </div>
 
 
 

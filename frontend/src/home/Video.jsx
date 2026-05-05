@@ -8,11 +8,12 @@ import Comments from "../comments/Comments.jsx";
 import VideoDislikeButton from "./VideoDislikeButton.jsx";
 import {formatDistanceToNow} from "date-fns";
 
-
 export default function Video(){
     const [video, setVideo] = useState({})
     const [currentWatchTime, setWatchTime] = useState(false)
     const [videos, setVideos] = useState([])
+
+    const [currentUser, setCurrentUser] = useState(null)
 
 
 
@@ -76,6 +77,19 @@ export default function Video(){
     fetchData()
     },[])
 
+    useEffect(() => {
+        const fetchUser = async () => {
+            const response = await fetch("http://localhost:8000/user", {
+                credentials: "include"
+            })
+            if(response.ok){
+                const data = await response.json()
+                setCurrentUser(data)
+            }
+        }
+        fetchUser()
+    }, [])
+
     return(<>
         <Header sidebar = "icon1" homepage="YouTube" signin= "Sign In" signout="Sign-out" userAccount="My account">
 
@@ -108,7 +122,7 @@ export default function Video(){
                   </p>
 
                     <div className="like_dislike">
-                    <VideoLikeButton video={video} setVideo={setVideo}>
+                    <VideoLikeButton video={video} setVideo={setVideo} currentUser={currentUser}>
 
                     </VideoLikeButton>
 
@@ -128,7 +142,7 @@ export default function Video(){
                     </div>
 
                     <div className="comments">
-                        <Comments video= {video}>
+                        <Comments video= {video} videoID={v}>
 
                         </Comments>
                     </div>

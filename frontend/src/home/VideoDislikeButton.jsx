@@ -1,7 +1,10 @@
+import DislikeSvg from "../assets/DislikeSVG.jsx";
+
 export default function VideoDislikeButton(){
+
     return(
-        <button className="dislike_button inactive_dislike">
-            <span>👍 {"20"}</span>
+        <button title="Dislike" className="dislike_button inactive_dislike">
+            <span><DislikeSvg></DislikeSvg> 20</span>
         </button>
         )
 }
