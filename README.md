@@ -28,6 +28,17 @@ and interactive user features.
 
 # Current Features
 
+## Performance Optimisation (Redis Caching)
+
+-   To improve performance and reduce unnecessary database load, the backend includes Redis-based caching for frequently accessed data.
+-    Implemented caching for video listings
+-    Implemented caching for comment retrieval and sorting
+-    Prevents repeated database queries for the same requests
+-    Reduces latency for high-traffic endpoints (e.g. /all/videos, /sort-comments)
+-    Improves scalability by avoiding expensive read operations on every request
+
+This ensures that commonly accessed content does not need to be reloaded from the database each time, significantly improving response times and reducing server load.
+
 ## User Authentication
 
 -   Secure authentication using **JWT tokens**
